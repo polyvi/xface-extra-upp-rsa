@@ -1,0 +1,25 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="com.polyvi.xface.extra.upp-rsa"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        version="1.0.0-dev">
+
+    <name>UPPCardAppInterface</name>
+    <author>PolyVi Inc.</author>
+    <description>xFace UPPay RSA Library</description>
+    <license>GPLv3</license>
+    <keywords>cordova,xface,rsa</keywords>
+
+    <!-- ios -->
+    <platform name="ios">
+        <source-file src="src/ios/Rsa_nn.c" target-dir="RSA" />
+        <header-file src="src/ios/Rsa_nn.h" target-dir="RSA" />
+        <source-file src="src/ios/Rsa.c" target-dir="RSA" />
+        <header-file src="src/ios/Rsa.h" target-dir="RSA" />
+        <header-file src="src/ios/RSAEncrypt.h" target-dir="RSA" />
+        <source-file src="src/ios/RSAEncrypt.m" target-dir="RSA" compiler-flags="-fno-objc-arc" />
+        <source-file src="src/ios/UPPUtil.c" target-dir="RSA" />
+        <header-file src="src/ios/UPPUtil.h" target-dir="RSA" />
+    </platform>
+</plugin>
