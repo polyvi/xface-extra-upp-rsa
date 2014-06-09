@@ -5,10 +5,10 @@
 //  Created by hejp raul on 12-5-23.
 //  Copyright (c) 2012年 Polyvi Inc. All rights reserved.
 //
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 /**
  HEX编码 将数组转换成16进制字符串.
@@ -18,11 +18,9 @@
  @param des     编码后的数据
  @returns void
  */
-void RSA_hexEncode(char* data, int len, char* des)
-{
+void RSA_hexEncode(char* data, int len, char* des) {
 	des[0] = 0;
-	for (int i = 0; i < len; i++)
-    {
+	for (int i = 0; i < len; i++) {
 		char c = data[i];
 		unsigned int hi = ((c & 0xF0)>>4) & 0x0F;
         unsigned int low = c & 0x0F;
@@ -39,13 +37,11 @@ void RSA_hexEncode(char* data, int len, char* des)
  @param des     解码后的数据
  @returns 成功返回解码后长度，否则返回(-1)
  */
-int RSA_hexDecode(char* data, int len, char* des)
-{
+int RSA_hexDecode(char* data, int len, char* des) {
 	int l = len;
 	char* p = des;
 	int offset = 0;
-	for (int i = 0; i < l; i+=2)
-    {
+	for (int i = 0; i < l; i+=2) {
 		unsigned char hi = data[i];
         unsigned char low = data[i+1];
 		if( hi>='0' && hi<='9')
@@ -93,15 +89,13 @@ int RSA_hexDecode(char* data, int len, char* des)
 	return offset;
 }
 
-char *RSA_convertIntToStr(int num,char *str,unsigned radix)
-{
+char *RSA_convertIntToStr(int num,char *str,unsigned radix) {
 	/*索引表*/
 	char index[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	unsigned unum;
 	int i = 0,j,k;
 
-	if((radix == 10) && (num < 0))
-    {
+	if((radix == 10) && (num < 0)) {
         unum = num * (-1);
         str[i++]='-';
 	}
@@ -129,12 +123,10 @@ char *RSA_convertIntToStr(int num,char *str,unsigned radix)
 	return str;
 }
 
-int RSA_getValueDependOnSize(uint8_t *p, int size)
-{
+int RSA_getValueDependOnSize(char *p, int size) {
     int ret = -1;
 
-    switch (size)
-    {
+    switch (size) {
         case 1:
             ret = p[0] & 0x000000FF;
             break;
@@ -147,25 +139,21 @@ int RSA_getValueDependOnSize(uint8_t *p, int size)
         case 4:
             ret = ((p[0] << 24 ) | (p[1] << 16) | (p[2] << 8) | p[3]) & 0xFFFFFFFF;
             break;
-        default:
-            break;
+        default:break;
     }
 
     return ret;
 }
 
-void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig)
-{
+void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig) {
     int srcLen = (int)strlen(src);
-    if (srcLen < totalLen)
-    {
+    if (srcLen < totalLen) {
         switch (sig)
         {
         case 'L':
             {
                 int j = 0;
-                for (int i = 0; i < totalLen; i++)
-                {
+                for (int i = 0; i < totalLen; i++) {
                     if( i < (totalLen - srcLen) )
                     {
                         dest[i] = content;
@@ -176,12 +164,10 @@ void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig)
                         j++;
                     }
                 }
-            }
-            break;
+            }break;
         case 'R':
             {
-                for (int i = 0; i < totalLen; i++)
-                {
+                for (int i = 0; i < totalLen; i++) {
                     if(i < srcLen)
                     {
                         dest[i] = src[i];
@@ -191,10 +177,8 @@ void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig)
                         dest[i] = content;
                     }
                 }
-            }
-            break;
-        default:
-            break;
+            }break;
+        default:break;
         }
     }
     else
@@ -203,18 +187,38 @@ void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig)
     }
 }
 
-int RSA_getCompressedBCDArray(uint8_t *dest, uint8_t *src, int srcLen)
-{
+int BCDArray2Integer(char* bcdArr,int bcdLen) {
+	int wei = bcdLen * 2 - 1;
+	int ret = 0;
+	for (int i = 0; i < bcdLen; i++) {
+		int jie = 1;
+		for (int j = 0; j < wei - 1; j++) {
+			jie *= 10;
+		}
+		ret += (((bcdArr[i]>> 4) & 0x0f) * jie *10) + (((bcdArr[i]) & 0x0f) * (jie));
+		wei -= 2;
+	}
+	return ret;
+}
+
+int  BCDToDec(char *bcd, int length) {
+	int dec = 0;
+	for(int i = 0; i < length; i++)
+	{
+		dec += (int)(bcd[i]<<(8*(length-1-i)));
+	}
+	return dec;
+}
+
+int RSA_getCompressedBCDArray(char *dest, char *src, int srcLen) {
     int destLen = srcLen/2;
-    if(srcLen % 2 != 0)
-    {
+    if(srcLen % 2 != 0) {
         destLen++;
     }
 
-    for(int i = 0; i < destLen; i++)
-    {
+    for(int i = 0; i < destLen; i++) {
         dest[i] = src[2 * i] << 4 | src[2 * i + 1];
     }
 
-    return destLen / 2;
+    return srcLen / 2;
 }

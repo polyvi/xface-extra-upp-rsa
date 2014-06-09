@@ -1,10 +1,13 @@
 //
-//  UPPUtil.h
+//  C_Util.h
 //  xFace
 //
 //  Created by hejp raul on 12-5-23.
 //  Copyright (c) 2012年 Polyvi Inc. All rights reserved.
 //
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 #ifndef xFace_UPPUtil_h
 #define xFace_UPPUtil_h
@@ -44,7 +47,7 @@ char *RSA_convertIntToStr(int num,char *str,unsigned radix);
  @param size取值区域大小
  @return    成功返回取到的值，否则返回-1
  */
-int RSA_getValueDependOnSize(uint8_t *p, int size);
+int RSA_getValueDependOnSize(char *p, int size);
 
 /**
  填充字符串，如果源字符串不足长度用参数指定字符补齐
@@ -57,12 +60,31 @@ int RSA_getValueDependOnSize(uint8_t *p, int size);
 void RSA_fillStr(char* dest, char* src, int totalLen, char content, char sig);
 
 /**
+ BCD数组转换成整型
+ @param bcdArr    BCD数组
+ @param bcdLen    数组长度
+ @returns   成功返回转换后的整型值，否则返回0
+ */
+int BCDArray2Integer(char* bcdArr,int bcdLen);
+
+/**
+ BCD转换成整型
+ @param bcd    BCD数组
+ @param length    BCD长度
+ @returns   成功返回转换后的整型值，否则返回0
+ */
+int  BCDToDec(char *bcd, int length);
+
+/**
  非压缩字节转换为压缩BCD码
  @param dest    转换后输出的压缩BCD码
  @param src     需要转换的字节数组
  @param srcLen  字节数组长度
  @return    转换后压缩BCD码的长度
  */
-int RSA_getCompressedBCDArray(uint8_t *dest, uint8_t *src, int srcLen);
+int RSA_getCompressedBCDArray(char *dest, char *src, int srcLen);
+#endif
 
+#ifdef __cplusplus
+}
 #endif
